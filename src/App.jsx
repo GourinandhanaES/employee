@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import SERVERURL from './services/serverUrl';
+
 
 const App = () => {
   const [employees, setEmployees] = useState([]);
@@ -9,7 +11,7 @@ const App = () => {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/employees');
+      const res = await axios.get(`${SERVERURL}/employees`);
       setEmployees(res.data);
     } catch (error) {
       console.error('Error fetching employees:', error.message);
@@ -28,10 +30,10 @@ const App = () => {
   const addOrUpdateEmployee = async (e) => {
     e.preventDefault();
     if (editingEmployee) {
-      await axios.put(`http://localhost:5000/employees/${editingEmployee.id}`, formData);
+      await axios.put(`${SERVERURL}/employees/${editingEmployee.id}`, formData);
       setEditingEmployee(null);
     } else {
-      await axios.post('http://localhost:5000/employees', formData);
+      await axios.post(`${SERVERURL}/employees`, formData);
     }
     setFormData({ name: '', email: '', status: 'active' });
     fetchEmployees();
@@ -39,7 +41,7 @@ const App = () => {
 
   const deleteEmployee = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/employees/${id}`);
+      await axios.delete(`${SERVERURL}/employees/${id}`);
       fetchEmployees();
     } catch (error) {
       console.error('Error deleting employee:', error.message);
